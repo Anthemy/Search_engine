@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>百度搜索结果 - {{ query }}</title>
+    <style>
+        /* 样式表 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            overflow-x: hidden;  /* 禁用水平滚动 */
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 40px;
+            background-image: url(https://www.baidu.com/img/bd_logo1.png);
+            background-size: cover;
+            margin-right: 30px;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            height: 40px;
+            width: 600px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex: 1;
+            height: 100%;
+            padding: 0 10px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .search-btn {
+            width: 80px;
+            height: 100%;
+            background-color: #38f;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .result {
+            margin-bottom: 40px; /* 增大搜索结果之间的距离 */
+        }
+
+        .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #1a0dab;
+            margin-bottom: 5px;
+        }
+
+        .link {
+            text-decoration: none;
+            display: block;  /* 修改为块级元素 */
+            height: 20px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* 添加省略号 */
+        }
+
+        .url {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            white-space: nowrap;  /* 禁止换行 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .summary {
+            color: #545454;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo"></div>
+        <form class="search-form" action="http://127.0.0.1:5000" method="post" target="_self">
+            <input class="search-input" type="text" name="wd" placeholder="请输入关键字">
+            <button class="search-btn" type="submit">搜索</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h1>百度搜索结果 - {{ query }}</h1>
+        {% if results %}
+        {% for result in results %}
+        <div class="result">
+            <p class="title"><a class="link" href="{{ result.url }}" target="_blank">{{ result.title }}</a></p>
+            <p class="url">{{ result.url }}</p>
+            <p class="summary">{{ result.summary }}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>抱歉，没有找到与 "{{ query }}" 相关的结果。</p>
+        {% endif %}
+    </div>
+</body>
+</html>

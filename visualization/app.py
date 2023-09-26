@@ -8,7 +8,7 @@ search = Search()
 def perform_search(query):
     # 在这里完成具体的搜索操作，并返回一个结果列表
     search.receive_text(query)
-    results = search.find_file()
+    results = search.sort_results()
     search.results = []
     return results
 

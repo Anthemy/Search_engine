@@ -45,7 +45,7 @@ class split:
         simhash1 = Simhash(text)
         for hash in self.sim:
             # print("海明距离：",simhash1.distance(hash)/len(text))
-            if simhash1.distance(hash) < 15:
+            if simhash1.distance(hash) < 10:
                 # print(text)
                 return 1
         self.sim.append(simhash1)

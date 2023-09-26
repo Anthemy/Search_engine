@@ -42,9 +42,9 @@ class Forward:
                 df.loc[index, 'location'] = str(index)
 
             df1['word'].apply(find_location)
-            df = df.groupby(['word', 'location', "count"]).size().reset_index(name='temp')
+            df = df.groupby(['word', 'location', "count"]).size().reset_index(name='visualization')
 
-            df.drop('temp', axis=1, inplace=True)
+            df.drop('visualization', axis=1, inplace=True)
             df.to_csv(f'D:/PythonCode/搜索引擎_data/forward_file/{self.count}.txt', index=False)
 
 

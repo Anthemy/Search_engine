@@ -20,7 +20,7 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 40
+CONCURRENT_REQUESTS = 48
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -60,7 +60,7 @@ CONCURRENT_REQUESTS = 40
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
 HTTPERROR_ALLOWED_CODES = [400,301,403,404,302,521]
-DOWNLOAD_TIMEOUT = 4
+DOWNLOAD_TIMEOUT = 3
 # LOG_LEVEL = 'INFO'
 COOKIES_ENABLED = False
 RETRY_ENABLED = False
