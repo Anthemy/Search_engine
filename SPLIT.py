@@ -39,12 +39,14 @@ class split:
         with open(f'D:/PythonCode/搜索引擎_data/participle_file/{count}.txt', 'w', encoding='utf-8') as f:
             f.write(f'{{"id": "{count}", "url": "{url}", "title": "{title}", "description": "{description}", '
                     f'"keywords": "{keywords}", "text": "{text}", "urls": "{urls}"}}')
+        return 0
 
     def page_review(self, text):
         simhash1 = Simhash(text)
         for hash in self.sim:
-            if simhash1.distance(hash) < 10:
-                print(text)
+            # print("海明距离：",simhash1.distance(hash)/len(text))
+            if simhash1.distance(hash) < 15:
+                # print(text)
                 return 1
         self.sim.append(simhash1)
         return 0

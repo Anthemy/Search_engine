@@ -23,18 +23,18 @@ class Reverse:
         count = 0
         word_index = {}
         for file in os.listdir(self.path):
+
             try:
 
                 count += 1
+
                 print(file)
 
                 df = pd.read_csv(self.path + file, header=None)
                 df.columns = ['word', 'count', 'location']  # 转换化成datafram，为列命名
-                # print(df)
+
 
                 def get_word(row):
-                    # print('=' * 100)
-                    # print(row)
                     word = row['word']
                     location = row['location']
                     if word not in word_index:
@@ -44,11 +44,8 @@ class Reverse:
                     # print(word_index[word])
 
                 df.apply(get_word, axis=1)
-                if count == 7000:
-                    break
-
             except:
-                print('error, 跳过此文件！')
+                print(file ,'error, 跳过此文件！')
         with open(f'D:/PythonCode/搜索引擎_data/reverse_file/1.txt', 'w', encoding='utf-8-sig', newline='') as f:
             writer = csv.writer(f)
             for word, value in word_index.items():

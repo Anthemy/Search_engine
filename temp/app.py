@@ -1,18 +1,17 @@
 from flask import Flask, request, render_template
-import pandas as pd
+from search import Search
 
 app = Flask(__name__)
+search = Search()
 
-def read_reverse(input):  # 读取倒排表
-    df = pd.read_csv("D:/PythonCode/搜索引擎_data/reverse_file/1.txt", header=None)
-    df.columns = ['word', 'value']
-    print(df.where(df['word'] == input).dropna()['value'].tolist())
-    return df.where(df['word'] == input).dropna()['value'].tolist()
 
 def perform_search(query):
     # 在这里完成具体的搜索操作，并返回一个结果列表
-    results = read_reverse(query)
+    search.receive_text(query)
+    results = search.find_file()
+    search.results = []
     return results
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
