@@ -17,6 +17,7 @@ class SearchResult:
         self.pagerank = pagerank
         self.dfj = doc_count      # 与这个搜索结果有关， 是含有该搜索词的文档数， 放在这里方便计算
 
+
     def __repr__(self):
         return 'id: ' + str(
             self.id) + ', word: ' + self.word + ', url: ' + self.url + ', title: ' + self.title + ', summary: ' + self.summary + ', count: ' + str(

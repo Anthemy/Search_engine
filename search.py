@@ -37,6 +37,7 @@ class Search:
         # print(self.results)
 
     def find_file(self, text):  # 找到文件
+        max_length = 80  # 设置摘要的最大字符数
         loction = {}
         for item in self.where:
             if item[0] not in loction:
@@ -50,7 +51,15 @@ class Search:
             try:
                 with open(f"D:/PythonCode/搜索引擎_data/participle_file/{key}.txt", 'r', encoding='utf-8') as fp:
                     doc = json.load(fp, strict=False)
-                    result.append(SearchResult(key, text, doc['url'], doc['title'], doc['description'], len(value),
+                    # print(type(key))
+                    with open(f"D:/PythonCode/搜索引擎_data/Original_text/{key}.txt", 'r', encoding='utf-8') as f:
+                        Original_text = f.read()
+                        # print(11)
+                    summary = doc['description'] if text in doc['description'] else self.keyword_matching_summary(Original_text, self.text)
+                    # 如果摘要字符数超过了最大限制，则截断文本
+                    if len(summary) > max_length:
+                        summary = summary[:max_length] + '...'
+                    result.append(SearchResult(key, text, doc['url'], doc['title'],summary, len(value),
                                                doc['pagerank'], doc_len))
                     print(result[len(result) - 1])
             except Exception as e:
@@ -71,7 +80,8 @@ class Search:
         if result.word in self.keywords:  # 如果搜索结果的词在选出的关键词中， 得分加5
             score += 15
         score += result.count * 15  # 得分加5*网页含搜索词数
-        score += result.relevance*10000000
+        score += result.relevance*1e7
+        score += result.pagerank*1e9
         if result.id in self.flag:  # 要是在别的搜索词中出现过该文档，则得分加8*出现次数
             score += 8*self.flag[result.id]
             self.flag[result.id] += 1
@@ -86,6 +96,20 @@ class Search:
     def remove_duplicates(self, key):       # 排序函数之一
         seen = set()
         return [x for x in self.results if getattr(x, key) not in seen and not seen.add(getattr(x, key))]
+
+    def keyword_matching_summary(self, text, keywords):
+        sentences = text.split('。')  # 将文本按句子分割成列表
+        summary_sentences = []
+        for i in range(len(sentences)):
+            if any(keyword in sentences[i] for keyword in keywords):
+                # 截取包含关键词的句子
+                start_index = max(0, i)  # 关键词前5个句子作为开头
+                end_index = min(i + 1, len(sentences))  # 关键词后6个句子作为结尾
+                summary_sentences.append(sentences[start_index:end_index])
+
+        # summary = '. '.join(summary_sentences)
+        summary = " ".join('%s' %a for a in summary_sentences)
+        return summary
 
     # 定义一个排序函数
     def sort_results(self):

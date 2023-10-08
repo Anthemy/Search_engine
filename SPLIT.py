@@ -11,7 +11,7 @@ class split:
     sim = []  # 保存网页的simhash
 
     def participle(self,text):
-        text = text.replace("\n", "").replace('\\', '').replace(' ', '').replace('\r', '')
+
         # print(text)
         keywords = jieba.analyse.extract_tags(text, topK=20, withWeight=True, allowPOS=('n', 'nr', 'ns'))
 
@@ -31,14 +31,17 @@ class split:
 
     def get_text_and_participle(self, text, count, url, title, description, urls):
         soup = BeautifulSoup(text, "html.parser")
-        text = soup.get_text()
+        Original_text = soup.get_text()
+        Original_text = Original_text.replace("\n", "").replace('\r', '')
         # print(text)
-        text, keywords = self.participle(text)
+        text, keywords = self.participle(Original_text)
         if self.page_review(text) == 1:
             return 1
         with open(f'D:/PythonCode/搜索引擎_data/participle_file/{count}.txt', 'w', encoding='utf-8') as f:
             f.write(f'{{"id": "{count}", "url": "{url}", "title": "{title}", "description": "{description}", '
                     f'"keywords": "{keywords}", "text": "{text}", "urls": "{urls}"}}')
+        with open(f'D:/PythonCode/搜索引擎_data/Original_text/{count}.txt', 'w', encoding='utf-8') as f:
+            f.write(Original_text)
         return 0
 
     def page_review(self, text):

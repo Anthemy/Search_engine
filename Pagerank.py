@@ -1,3 +1,4 @@
+import ast
 import json
 import os
 import networkx as nx
@@ -27,14 +28,14 @@ class Pagerank:
             try:
                 # 读取 JSON 文件
                 with open(self.path + file, "r", encoding='utf-8') as f:
-                    data = json.load(f)
+                    data = json.load(f, strict=False)
 
                 # 添加节点
                 url = data["url"]
                 self.G.add_node(url)
 
                 # 添加边
-                urls = data["urls"]
+                urls = ast.literal_eval(data['urls'])
                 for dst in urls:
                     self.G.add_edge(url, dst)
                 location[count] = file
@@ -46,15 +47,14 @@ class Pagerank:
         pagerank = nx.pagerank(self.G)
 
         print('开始保存PageRank')
-        count = 0
+        count = 1
         # 更新每个节点的 PageRank 值并保存到文件中
         for url, value in pagerank.items():
-            print(count)
-            count += 1
+
             try:
                 # 读取 JSON 文件
                 with open(self.path + location[count], "r", encoding='utf-8') as f:
-                    data = json.load(f)
+                    data = json.load(f, strict=False)
 
                 # 更新 PageRank 值并删除 urls
                 data["pagerank"] = value
@@ -63,6 +63,8 @@ class Pagerank:
                 # 保存更新后的数据到文件中
                 with open(self.path + location[count], "w", encoding='utf-8') as f:
                     json.dump(data, f, indent=4, ensure_ascii=False)
+                print(count)
+                count += 1
             except:
                 print('error, 保存数据失败！')
 

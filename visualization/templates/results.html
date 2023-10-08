@@ -106,6 +106,14 @@
 
         .summary {
             color: #545454;
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+        }
+
+        .highlight {
+            color: red;
         }
     </style>
 </head>
@@ -118,19 +126,23 @@
         </form>
     </div>
 
+
     <div class="container">
         <h1>百度搜索结果 - {{ query }}</h1>
         {% if results %}
         {% for result in results %}
         <div class="result">
-            <p class="title"><a class="link" href="{{ result.url }}" target="_blank">{{ result.title }}</a></p>
+            <p class="title"><a class="link" href="{{ result.url }}" target="_blank">{{ result.title|highlight(words) }}</a></p>
             <p class="url">{{ result.url }}</p>
-            <p class="summary">{{ result.summary }}</p>
+            <p class="summary">{{ result.summary|highlight(words) }}</p>
         </div>
         {% endfor %}
+
+
         {% else %}
         <p>抱歉，没有找到与 "{{ query }}" 相关的结果。</p>
         {% endif %}
     </div>
+
 </body>
 </html>

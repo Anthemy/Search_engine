@@ -52,16 +52,19 @@ class Relevancy:
     def compute_relevance(self):
         self.compute_query_wij()
         for doc in self.search_results:
-
             doc_den = 0  # 文档分母
             query_den = 0  # 查询词分母
             molecule = 0  # 分子
             for word in self.query_words:
                 wij = self.wij[word]  # 获取搜索词的权重
                 tfidf = self.dictionary[word][doc.id]  # 获取文档的tf-idf值
+                if tfidf != 0:
+                    has_query_word = True
+                    doc_den += tfidf ** 2
+                    query_den += wij ** 2
+                    molecule += wij * tfidf  # 计算分子
+            if doc_den != 0 and query_den != 0:
+                doc.relevance = molecule / (doc_den ** 0.5 * query_den ** 0.5)   # 将计算得到的相关度值赋给文档对象的relevance属性
+            else:
+                doc.relevance = 0
 
-                doc_den += tfidf ** 2
-                query_den += wij ** 2
-                molecule += wij * tfidf  # 计算分子
-
-            doc.relevance = molecule / (doc_den ** 0.5 * query_den ** 0.5)  # 将计算得到的相关度值赋给文档对象的relevance属性
