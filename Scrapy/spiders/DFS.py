@@ -5,11 +5,12 @@ import SPLIT
 from Scrapy.items import ScrapyItem
 
 
-class DfsSpider(scrapy.Spider):
+class DfsSpider(scrapy.Spider):     # 深度优先遍历
     name = "DFS"
     # allowed_domains = [r"*"]
-    start_urls = ["https://baike.baidu.com"]
-    count = 0
+    start_urls = ["https://www.guancha.cn/"]
+    count = 8009
+
 
     split = SPLIT.split()
 

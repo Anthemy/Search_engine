@@ -8,7 +8,7 @@ class BfsSpider(scrapy.Spider):   # 广度优先遍历
     name = "BFS"
     # allowed_domains = ["baike.baidu.com"]
 
-    start_urls = ["https://news.sina.com.cn/"]
+    start_urls = ["https://www.guancha.cn/"]
     count = 0
     queue = queue.Queue()
     split = SPLIT.split()

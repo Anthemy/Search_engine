@@ -19,20 +19,20 @@ class split:
         text = pd.Series(text)[pd.Series(text).apply(len) > 0]  # 去除长度为0的词
 
         stopwords = ['，', '。', '！', '？', '、', '；', '：', '“', '”', '‘', '’', '（', '）', '【', '】', '{', '}', '<',
-                     '>', '《', '》', '『', '』', '「', '」', '[', ']', '—', '——', '-', '_', '~', '@', '#', '$', '\n'
+                     '>', '《', '》', '『', '』', '「', '」', '[', ']', '—', '——', '-', '_', '~', '@', '#', '$', '\n',
                                                                                                            '%', '^',
-                     '&', '*', '(', ')', '+', '=', '|', '/', '`', '.', ',', '·', '\xa0', '\t', '\u3000', '\r'
+                     '&', '*', '(', ')', '+', '=', '|', '/', '`', '.', ',', '·', '\xa0', '\t', '\u3000', '\r', '\u200b',
                                                                                                          ' ', ':', ';',
                      '\\', '...', '▪', "'", '"', '!', '了', '的', '啊', '哎', '哎呀', '哎哟', '唉', '嗄', '嗯',
                      '嘛', '呀', '呃', '呦', '哈', '哈哈', '嘿', '嘿嘿', '喂', '嗨', '哇', '哇塞', '哇哦', '哦',
-                     '噢', '欸', '诶', '诶嘿', '额', '额滴', '呜', '呜呼', ]
+                     '噢', '欸', '诶', '诶嘿', '额', '额滴', '呜', '呜呼', ' ', '\ue610', '\ufeff', '\xa0']
 
         return str(text[~text.isin(stopwords)].tolist()), keywords
 
     def get_text_and_participle(self, text, count, url, title, description, urls):
         soup = BeautifulSoup(text, "html.parser")
         Original_text = soup.get_text()
-        Original_text = Original_text.replace("\n", "").replace('\r', '')
+        Original_text = Original_text.replace("\n", "").replace('\r', '').replace('\t', '').replace('\u3000','')
         # print(text)
         text, keywords = self.participle(Original_text)
         if self.page_review(text) == 1:

@@ -7,7 +7,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
-            overflow-x: hidden;  /* 禁用水平滚动 */
+            overflow-x: hidden; /* 禁用水平滚动 */
         }
 
         .top-bar {
@@ -88,7 +88,7 @@
 
         .link {
             text-decoration: none;
-            display: block;  /* 修改为块级元素 */
+            display: block; /* 修改为块级元素 */
             height: 20px;
             overflow: hidden;
             white-space: nowrap;
@@ -99,7 +99,7 @@
             color: #666;
             font-size: 14px;
             margin-bottom: 10px;
-            white-space: nowrap;  /* 禁止换行 */
+            white-space: nowrap; /* 禁止换行 */
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -115,34 +115,77 @@
         .highlight {
             color: red;
         }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .pagination a.active {
+            background-color: #38f;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="logo"></div>
-        <form class="search-form" action="http://127.0.0.1:5000" method="post" target="_self">
-            <input class="search-input" type="text" name="wd" placeholder="请输入关键字">
-            <button class="search-btn" type="submit">搜索</button>
-        </form>
+<div class="top-bar">
+    <div class="logo"></div>
+    <form class="search-form" action="http://127.0.0.1:5000" method="post" target="_self">
+        <input class="search-input" type="text" name="wd" placeholder="{{query}}">
+        <button class="search-btn" type="submit">搜索</button>
+    </form>
+</div>
+<div class="container">
+    <h1>百度搜索结果 - {{ query }}</h1>
+    {% if results %}
+    <p>共搜索到 {{ results_len }} 条结果。当前第{{pagination.page}}页</p>
+    {% for result in results %}
+    <div class="result">
+        <p class="title"><a class="link" href="{{ result.url }}" target="_blank">{{ result.title|highlight(words) }}</a>
+        </p>
+        <p class="url">{{ result.url }}</p>
+        <p class="summary">{{ result.summary|highlight(words) }}</p>
     </div>
+    {% endfor %}
+    <div class="pagination">
+        {% if pagination.page > 1 %}
+        <a href="?wd={{ query }}&page={{ pagination.page - 1 }}">上一页</a>
+        {% endif %}
 
+        {% for i in range(1, total_pages+1) %}
+        {% if i == pagination.page %}
+        <a class="active" href="?wd={{ query }}&page={{ i }}">{{ i }}</a>
+        {% elif i == 1 %}
+        <a href="?wd={{ query }}&page={{ i }}">{{ i }}</a>
+        {% elif i == total_pages %}
+        <a href="?wd={{ query }}&page={{ i }}">{{ i }}</a>
+        {% elif (pagination.page-1 <= i <= pagination.page+1) %}
+        <a href="?wd={{ query }}&page={{ i }}">{{ i }}</a>
+        {% elif (pagination.page-2 == i or i == pagination.page+2) %}
+        <span>...</span>
 
-    <div class="container">
-        <h1>百度搜索结果 - {{ query }}</h1>
-        {% if results %}
-        {% for result in results %}
-        <div class="result">
-            <p class="title"><a class="link" href="{{ result.url }}" target="_blank">{{ result.title|highlight(words) }}</a></p>
-            <p class="url">{{ result.url }}</p>
-            <p class="summary">{{ result.summary|highlight(words) }}</p>
-        </div>
+        {% endif %}
         {% endfor %}
 
-
-        {% else %}
-        <p>抱歉，没有找到与 "{{ query }}" 相关的结果。</p>
+        {% if pagination.page < total_pages %}
+        <a href="?wd={{ query }}&page={{ pagination.page + 1 }}">下一页</a>
         {% endif %}
     </div>
 
+
+    {% else %}
+    <p>抱歉，没有找到与 "{{ query }}" 相关的结果。</p>
+    {% endif %}
+</div>
 </body>
 </html>
